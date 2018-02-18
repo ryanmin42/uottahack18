@@ -17,7 +17,7 @@
     "http": "0.0.0",
     "path": "0.12.7",
     "express": "4.16.2",
-    "particle-api-js": "7.1.1",
+    "text-to-speech-js": "1.1.8",
     "body-parser": "1.18.2", 
     "fs": "2.2.2",
     "method-override": "2.3.10"
