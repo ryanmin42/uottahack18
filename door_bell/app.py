@@ -31,13 +31,13 @@ def take_and_send_picture():
 	imageJSON = json.dumps({'picture' : jpg_as_text.encode('base64')})
 	json_object = json.loads(imageJSON)
 	try:
-		res = requests.post('http://localhost:3000/api/image', json=json_object)
+		res = requests.post('http://7d0b2aa2.ngrok.io/api/image', json=json_object)
 	except Exception:
 		pass
 	return jsonify({"result" : "SUCCESS"})
 
-#if __name__ == '__main__':
-#	handler = RotatingFileHandler('flask.log', maxBytes=10000, backupCount=1)
-#	handler.setLevel(logging.INFO)
-#	app.logger.addHandler(handler)
-#app.run(host="0.0.0.0",port=5000)
+if __name__ == '__main__':
+	handler = RotatingFileHandler('flask.log', maxBytes=10000, backupCount=1)
+	handler.setLevel(logging.INFO)
+	app.logger.addHandler(handler)
+	app.run(host="0.0.0.0",port=5000)
