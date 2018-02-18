@@ -15,17 +15,14 @@
     #add {
       -webkit-animation: fadein 1s;
     }
-
     @keyframes fadein {
       from { opacity: 0; }
       to   { opacity: 1; }
     }
-
     @keyframes fadeout {
       from { opacity: 1; }
       to   { opacity: 0; }
     }
-
     #switchDisplay {
       display:block;
       margin: 0 auto;
@@ -38,17 +35,15 @@
   var results;
   var file_white;
   var file_black;
-
   function upload_white() {
-    file_white =  document.getElementById("inputImage");
-    document.getElementById("inputImage").setAttribute("value", file_white.name);
+    file_white =  document.getElementById("inputImage").webkitRelativePath;
+    console.log(file_white);
+    document.getElementById("inputImage").setAttribute("value", document.getElementById("inputImage").name);
   }
-
   function upload_black() {
-    file_black =  document.getElementById("inputImage2");
-    document.getElementById("inputImage2").setAttribute("value", file_black.name);
+    file_black =  document.getElementById("inputImage2").webkitRelativePath;
+    document.getElementById("inputImage2").setAttribute("value", document.getElementById("inputImage2").name);
   }
-
   if(change) {
     var url;
     var server = new XMLHttpRequest();
@@ -122,9 +117,8 @@
     };
     request3.send(JSON.stringify(body3));
   }
-
   function enroll_white() {
-    var url = file_white;
+    var url = encodeURI($('#inputImage').val());
     var name = $('#nameImage').val();
     if(/\S/.test(name) && /\S/.test($('#inputImage').val()))
     $('ul.whitelist').append('<li>'+ name + '</li>');
@@ -137,11 +131,10 @@
       if (this.readyState === 4) {
         console.log('Status:', this.status);
         console.log('Headers:', this.getAllResponseHeaders());
-        console.log(name);
+        console.log(file_white);
         console.log('Body:', this.responseText);
       }
     };
-
     var body = {
       'image': url,
       'subject_id': name,
@@ -149,9 +142,8 @@
     };
     request.send(JSON.stringify(body));
   }
-
   function enroll_black() {
-    var url = file_black;
+    var url = encodeURI($('#inputImage2').val());
     var name = $('#nameImage2').val();
     var request = new XMLHttpRequest();
     request.open('POST', 'https://api.kairos.com/enroll');
@@ -174,7 +166,6 @@
     $('ul.blacklist').append('<li>' + name + '</li>');
     request.send(JSON.stringify(body));
   }
-
   function display() {
     document.getElementById("add").style.display = "none";
     document.getElementById("check").style.display = "block";
@@ -186,7 +177,7 @@
     <h1>Add to Whitelist</h1>
     If you have a picture of family or friends you'd like to add to the whitelist, upload their picture here.
     <br><br>
-    <input type="file" id="inputImage" onclick="upload_white()" value="Choose image"/>
+    <input style="display:block" id="inputImage" type="text" placeholder="Choose image"/>
     <input style="display:block" type="text" name="inputImage" id="nameImage" placeholder="Name" title="" value="" />
     <button onclick="enroll_white()" style="display:block">Add to Whitelist</button>
     <br><br>
@@ -200,7 +191,7 @@
     <h1>Add to Blacklist</h1>
     If you have a picture of someone suspicious you'd like to add to the blacklist, upload their picture here.
     <br><br>
-    <input type="file" id="inputImage2" onclick="upload_black()" value="Choose image"/>
+    <input style="display:block" id="inputImage2" type="text" placeholder="Choose image"/>
     <input style="display:block" type="text" name="inputImage" id="nameImage2" placeholder="Name" title="" value="" />
     <button onclick="enroll_black()" style="display:block">Add to Blacklist</button>
     <br><br>
