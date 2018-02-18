@@ -1,10 +1,10 @@
 {
-  "name": "app-service-hello-world",
-  "description": "Simple Hello World Node.js sample for Azure App Service",
-  "version": "0.0.1",
+  "name": "uottahack18",
+  "description": "Doorbell monitoring and face recognition service to detect familiar and harmful people at the door.",
+  "version": "1.0.1",
   "private": true,
   "license": "MIT",
-  "author": "Microsoft",
+  "author": "Ryan Min",
   "engines": {
     "node": ">=6.9.1"
   },
@@ -12,10 +12,14 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
-    "path": "^0.12.7",
-    "pip": "0.0.1",
     "querystring": "^0.2.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "http": "0.0.0",
+    "path": "0.12.7",
+    "express": "4.16.2",
+    "particle-api-js": "7.1.1",
+    "body-parser": "1.18.2", 
+    "fs": "2.2.2",
+    "method-override": "2.3.10"
   }
 }
