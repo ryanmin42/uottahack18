@@ -56,12 +56,14 @@
       if (this.readyState === 4) {
         console.log(result);
         if(result >= 0.6) {
-          document.getElementById('person').setAttribute("src", "");
-          document.getElementById('result').innerHTML = "This is a family member. Name:" + name;
+          results = "This is a family member. Name:" + name;
+          document.getElementById('person').setAttribute("src", url);
+          document.getElementById('result').innerHTML = results;
         }
         else {
-          document.getElementById('person').setAttribute("src", "");
-          document.getElementById('result').innerHTML = "This is an unknown person.";
+          results = "This is an unknown person.";
+          document.getElementById('person').setAttribute("src", url);
+          document.getElementById('result').innerHTML = results;
         }
       }
     };
@@ -75,18 +77,19 @@
     request2.setRequestHeader('Content-Type', 'application/json');
     request2.setRequestHeader('app_id', 'c5f15112');
     request2.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
-
     request2.onreadystatechange = function () {
       var result2 = parseFloat(JSON.parse(this.responseText).images[0].transaction.confidence);
       if (this.readyState === 4) {
         console.log(result2);
         if(result2 >= 0.6) {
+          results = "This is a suspicious person.";
           document.getElementById('person').setAttribute("src", url);
-          document.getElementById('result').innerHTML = "This is a suspicious person.";
+          document.getElementById('result').innerHTML = results;
         }
         else {
-          document.getElementById('person').setAttribute("src", "");
-          document.getElementById('result').innerHTML = "This is an unknown person.";
+          results = "This is an unknown person.";
+          document.getElementById('person').setAttribute("src", url);
+          document.getElementById('result').innerHTML = results;
         }
       }
     };
