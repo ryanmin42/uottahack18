@@ -48,75 +48,88 @@
 		if(change) {
 			var url;
 			var server = new XMLHttpRequest();
-			server.open('GET', 'https:/localhost/api/html');
+			server.open('GET', '/api/html');
 			server.onreadystatechange = function () {
 				if (this.readyState === 4) {
-					url = JSON.parse(this.responseText).picture;
+					//url = JSON.parse(this.responseText).picture;
+					url = "http://820a258b.ngrok.io/images/send_image.jpg"
+					var request = new XMLHttpRequest();
+					request.open('POST', 'https://api.kairos.com/recognize');
+					request.setRequestHeader('Content-Type', 'application/json');
+					request.setRequestHeader('app_id', 'c5f15112');
+					request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
+					request.onreadystatechange = function () {
+						if (this.readyState === 4) {
+							var transaction1 = JSON.parse(this.responseText).images[0].transaction;
+							var result = 0;
+							if (transaction1.status !== "failure") {
+								result = parseFloat(transaction1.confidence);
+							}
+							if(result >= 0.6) {
+								var name = transaction1.subject_id;
+								results = "This is a family member. Name:" + name;
+								document.getElementById('person').setAttribute("src", url);
+								document.getElementById('result').innerHTML = results;
+							}
+							else {
+								results = "This is an unknown person.";
+								document.getElementById('person').setAttribute("src", url);
+								document.getElementById('result').innerHTML = results;
+
+								var request2 = new XMLHttpRequest();
+								request2.open('POST', 'https://api.kairos.com/recognize');
+								request2.setRequestHeader('Content-Type', 'application/json');
+								request2.setRequestHeader('app_id', 'c5f15112');
+								request2.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
+								request2.onreadystatechange = function () {
+										if (this.readyState === 4) {
+										var transaction2 = JSON.parse(this.responseText).images[0].transaction;
+										var result2 = 0;
+										if (transaction2.status !== "failure") {
+											result2 = parseFloat(transaction2.confidence);
+										}
+										console.log(result2);
+										if(result2 >= 0.6) {
+											var name = transaction2.subject_id;
+											results = "This is a suspicious person. Name: " + name +"<br/><b>Police are alerted and are on their way!!!</b>";
+											document.getElementById('person').setAttribute("src", url);
+											document.getElementById('result').innerHTML = results;
+										}
+										else {
+											results = "This is an unknown person.";
+											document.getElementById('person').setAttribute("src", url);
+											document.getElementById('result').innerHTML = results;
+										}
+									}
+								};
+								var body2 = {
+									'image': url,
+									'gallery_name': 'badpeople'
+								};
+								request2.send(JSON.stringify(body2));
+							}
+						}
+					};
+					var body = {
+						'image': url,
+						'gallery_name': 'family'
+					};
+					request.send(JSON.stringify(body));
+					/*var sent = new XMLHttpRequest();
+					sent.open('GET', '/api/results');
+					sent.onreadystatechange = function () {
+						if (this.readyState === 4) {
+							console.log("Success!");
+						}
+					}*/
 				}
 			}
-			var request = new XMLHttpRequest();
-			request.open('POST', 'https://api.kairos.com/recognize');
-			request.setRequestHeader('Content-Type', 'application/json');
-			request.setRequestHeader('app_id', 'c5f15112');
-			request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
-			request.onreadystatechange = function () {
-				var result = parseFloat(JSON.parse(this.responseText).images[0].transaction.confidence);
-				if (this.readyState === 4) {
-					console.log(result);
-					if(result >= 0.6) {
-						results = "This is a family member. Name:" + name;
-						document.getElementById('person').setAttribute("src", url);
-						document.getElementById('result').innerHTML = results;
-					}
-					else {
-						results = "This is an unknown person.";
-						document.getElementById('person').setAttribute("src", url);
-						document.getElementById('result').innerHTML = results;
-					}
-				}
-			};
-			var body = {
-				'image': url,
-				'gallery_name': 'family'
-			};
-			request.send(JSON.stringify(body));
-			var request2 = new XMLHttpRequest();
-			request2.open('POST', 'https://api.kairos.com/recognize');
-			request2.setRequestHeader('Content-Type', 'application/json');
-			request2.setRequestHeader('app_id', 'c5f15112');
-			request2.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
-			request2.onreadystatechange = function () {
-				var result2 = parseFloat(JSON.parse(this.responseText).images[0].transaction.confidence);
-				if (this.readyState === 4) {
-					console.log(result2);
-					if(result2 >= 0.6) {
-						results = "This is a suspicious person. Name: " + name;
-						document.getElementById('person').setAttribute("src", url);
-						document.getElementById('result').innerHTML = results;
-					}
-					else {
-						results = "This is an unknown person.";
-						document.getElementById('person').setAttribute("src", url);
-						document.getElementById('result').innerHTML = results;
-					}
-				}
-			};
-			var body2 = {
-				'image': url,
-				'gallery_name': 'badpeople'
-			};
-			request2.send(JSON.stringify(body2));
-			var sent = new XMLHttpRequest();
-			sent.open('GET', '/api/results');
-			sent.onreadystatechange = function () {
-				if (this.readyState === 4) {
-					console.log("Success!");
-				}
-			}
-			var body3 = {
+			server.send();
+
+			/*var body3 = {
 				'results': results
 			};
-			request3.send(JSON.stringify(body3));
+			request3.send(JSON.stringify(body3));*/
 		}
 	}
 	get_uploaded();
