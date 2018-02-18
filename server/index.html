@@ -36,9 +36,10 @@
 
   <script type="text/javascript">
   var change = false;
+  var results;
   if(change) {
     var url;
-    var server = newXMLHttpRequest();
+    var server = new XMLHttpRequest();
     server.open('GET', '/api/html');
     server.onreadystatechange = function () {
       if (this.readyState === 4) {
@@ -64,7 +65,6 @@
         }
       }
     };
-
     var body = {
       'image': url,
       'gallery_name': 'family'
@@ -90,12 +90,22 @@
         }
       }
     };
-
-    var body = {
+    var body2 = {
       'image': url,
       'gallery_name': 'badpeople'
     };
-    request2.send(JSON.stringify(body));
+    request2.send(JSON.stringify(body2));
+    var sent = new XMLHttpRequest();
+    sent.open('GET', '/api/results');
+    sent.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        console.log("Success!");
+      }
+    }
+    var body3 = {
+      'results': results
+    };
+    request3.send(JSON.stringify(body3));
   }
 
   function enroll_white() {
