@@ -9,96 +9,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  font-family: Lato, sans-serif;
-}
-
-.container {
-  min-width: 80%;
-}
-
-h1, h2, h3, h4 {
-  font-family: Source Sans Pro, sans-serif;
-}
-
-h3 {
-  margin-top: 30px;
-}
-
-ul {
-  margin-bottom: 40px;
-}
-
-header {
-  background-color: #282828;
-}
-
-#logo {
-  width:200px;
-}
-
-button {
-  padding: 10px;
-  background-color: #1d5680;
-  color:white;
-  border-radius: 8%;
-  border: solid 1px #1d5680;
-  margin-top: 10px;
-}
-
-button:hover {
-  background-color: #216391;
-}
-
-input {
-  padding: 5px;
-  margin-top: 10px;
-}
-
-body {
-  background-color: #e6e6e6;
-}
-
-#result {
-  margin-top: 10px;
-}
-
-.feed_title {
-  font-weight: bold;
-}
-
-#check {
-  text-align: center;
-  -webkit-animation: fadein 1.5s;
-}
-#add {
-  -webkit-animation: fadein 1.5s;
-}
-@keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes fadeout {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-#switchDisplay {
-  display:block;
-  margin: 0 auto;
-  margin-bottom: 20px;
-}
-
-#buttonDiv {
-  margin-top:30px;
-}
-
-li {
-  margin-left: 5%;
-}
-</style>
 <body>
   <script type="text/javascript">
   var change = false;
@@ -138,14 +48,14 @@ li {
               if(result >= 0.6) {
                 var name = transaction1.subject_id;
                 results = "This is a friend of family member. Name:" + name;
-                var audio = new Audio('https://doc-14-38-docs.googleusercontent.com/docs/securesc/c9bevesce348vr9uing7uhn8u4a4isl2/f68rne7p18vqqhqpaoe18f306uckuo3i/1518962400000/17837395270871112974/17837395270871112974/1tFfaFtn1RtFvBAVXevzAD77x7OzwyH_c?e=download');
+                var audio = new Audio('/audio/friend and family.mp3');
                 audio.play();
                 document.getElementById('person').setAttribute("src", url);
                 document.getElementById('result').innerHTML = results;
               }
               else {
                 results = "This is an unknown person.";
-                var audio = new Audio('https://doc-14-38-docs.googleusercontent.com/docs/securesc/c9bevesce348vr9uing7uhn8u4a4isl2/h02galus19ltagln9oub9hmcvbab4pfm/1518962400000/17837395270871112974/17837395270871112974/1bzU8BATqkBljWvs05QlTq2c7yFx8wAcv?e=download');
+                var audio = new Audio('/audio/unknown.mp3');
                 audio.play();
                 document.getElementById('person').setAttribute("src", url);
                 document.getElementById('result').innerHTML = results;
@@ -164,14 +74,14 @@ li {
                     console.log(result2);
                     if(result2 >= 0.6) {
                       var name = transaction2.subject_id;
-                      var audio2 = new Audio('https://doc-0g-38-docs.googleusercontent.com/docs/securesc/c9bevesce348vr9uing7uhn8u4a4isl2/rmt46qtibq5701k8gj49hu0p7qs9sfud/1518962400000/17837395270871112974/17837395270871112974/1TGV9U4coM2SyFcVZ5kJx4Oavv_rsnvve?e=download');
+                      var audio2 = new Audio('/audio/suspicious.mp3');
                       audio2.play();
                       results = "This is a suspicious person. Name: " + name +"<br/><b>Police are alerted and are on their way!!!</b>";
                       document.getElementById('person').setAttribute("src", url);
                       document.getElementById('result').innerHTML = results;
                     }
                     else {
-                      var audio2 = new Audio('https://doc-14-38-docs.googleusercontent.com/docs/securesc/c9bevesce348vr9uing7uhn8u4a4isl2/h02galus19ltagln9oub9hmcvbab4pfm/1518962400000/17837395270871112974/17837395270871112974/1bzU8BATqkBljWvs05QlTq2c7yFx8wAcv?e=download');
+                      var audio2 = new Audio('/audio/unknown.mp3');
                       audio2.play();
                       results = "This is an unknown person.";
                       document.getElementById('person').setAttribute("src", url);
@@ -267,7 +177,7 @@ function display() {
 </script>
 <header>
   <div class="container">
-    <img  id="logo" src="https://lh5.googleusercontent.com/WarfSM6IHVxuoRGItdL5mrafvwKVgkal3qokcq_-WmS16rTLE9BTTkoh8adrpirfYkqlyhdYZoJOVEigBdW-=w1920-h900"/>
+    <img  id="logo" src="visualeyes logo.png"/>
   </div>
 </header>
 <div class="container">

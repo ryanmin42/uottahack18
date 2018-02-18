@@ -20,7 +20,7 @@ server.use(bodyParser.urlencoded({
 
 server.use(bodyParser.json());
 
-request({
+/*request({
   method: 'POST',
   url: 'https://api.kairos.com/gallery/remove',
   headers: {
@@ -49,6 +49,7 @@ request({
   console.log('Headers:', JSON.stringify(response.headers));
   console.log('Response:', body);
 });
+*/
 
 server.post('/api/image', function(req, res) {
 	picture = req.body;
