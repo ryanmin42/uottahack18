@@ -4,6 +4,8 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var server = express();
+server.use(express.static('audio'));
+
 var request = require('request');
 //var TextToSpeech = require('text-to-speech-js');
 server.use(bodyParser.json({limit: "50mb"}));
@@ -14,13 +16,33 @@ server.get('/', function(req, res) {
 	res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+server.get('/style.css', function(req, res) {
+  res.sendFile(path.join(__dirname + '/style.css'));
+});
+
+server.get('/visualeyes_logo.png', function(req, res) {
+  res.sendFile(path.join(__dirname + '/visualeyes_logo.png'));
+});
+
+server.get('/audio/friend_and_family.mp3', function(req, res) {
+  res.sendFile(path.join(__dirname + '/audio/friend_and_family.mp3'));
+});
+
+server.get('/audio/suspicious.mp3', function(req, res) {
+  res.sendFile(path.join(__dirname + '/audio/suspicious.mp3'));
+});
+
+server.get('/audio/unknown_person.mp3', function(req, res) {
+  res.sendFile(path.join(__dirname + '/audio/unknown_person.mp3'));
+});
+
 server.use(bodyParser.urlencoded({
 	extended: true
 }));
 
 server.use(bodyParser.json());
 
-request({
+/*request({
   method: 'POST',
   url: 'https://api.kairos.com/gallery/remove',
   headers: {
@@ -49,6 +71,7 @@ request({
   console.log('Headers:', JSON.stringify(response.headers));
   console.log('Response:', body);
 });
+*/
 
 server.post('/api/image', function(req, res) {
 	picture = req.body;
