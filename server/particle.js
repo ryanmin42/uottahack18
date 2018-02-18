@@ -23,10 +23,9 @@ app.get('/api/devices', function (req, res) {
 });
 
 app.post('/api/particle', function (req, res) {
-  particle.callFunction({
-    deviceId: '470057000751353530373132',
+  particle.publish({
     name: 'results',
-    argument: res.body.results,
+    data: res.body,
     auth: token
   }).then(function(data) {
     console.log('it worked!');
