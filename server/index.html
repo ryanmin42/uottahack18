@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Detect Faces Sample</title>
+  <title>Awesome Door Bell</title>
+  <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <style>
@@ -32,6 +35,69 @@
 <body>
 
   <script type="text/javascript">
+  var change = false;
+  if(change) {
+    var url;
+    var server = newXMLHttpRequest();
+    server.open('GET', '/api/html');
+    server.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        url = JSON.parse(this.responseText).picture;
+      }
+    }
+    var request = new XMLHttpRequest();
+    request.open('POST', 'https://api.kairos.com/recognize');
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('app_id', 'c5f15112');
+    request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
+    request.onreadystatechange = function () {
+      var result = parseFloat(JSON.parse(this.responseText).images[0].transaction.confidence);
+      if (this.readyState === 4) {
+        console.log(result);
+        if(result >= 0.6) {
+          document.getElementById('person').setAttribute("src", "");
+          document.getElementById('result').innerHTML = "This is a family member. Name:" + name;
+        }
+        else {
+          document.getElementById('person').setAttribute("src", "");
+          document.getElementById('result').innerHTML = "This is an unknown person.";
+        }
+      }
+    };
+
+    var body = {
+      'image': url,
+      'gallery_name': 'family'
+    };
+    request.send(JSON.stringify(body));
+    var request2 = new XMLHttpRequest();
+    request2.open('POST', 'https://api.kairos.com/recognize');
+    request2.setRequestHeader('Content-Type', 'application/json');
+    request2.setRequestHeader('app_id', 'c5f15112');
+    request2.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
+
+    request2.onreadystatechange = function () {
+      var result2 = parseFloat(JSON.parse(this.responseText).images[0].transaction.confidence);
+      if (this.readyState === 4) {
+        console.log(result2);
+        if(result2 >= 0.6) {
+          document.getElementById('person').setAttribute("src", url);
+          document.getElementById('result').innerHTML = "This is a suspicious person.";
+        }
+        else {
+          document.getElementById('person').setAttribute("src", "");
+          document.getElementById('result').innerHTML = "This is an unknown person.";
+        }
+      }
+    };
+
+    var body = {
+      'image': url,
+      'gallery_name': 'badpeople'
+    };
+    request2.send(JSON.stringify(body));
+  }
+
   function enroll_white() {
     var url = encodeURI($('#inputImage').val());
     var name = $('#nameImage').val();
@@ -84,57 +150,10 @@
     request.send(JSON.stringify(body));
   }
 
-  function recognize() {
-    var request = new XMLHttpRequest();
-    var url = encodeURI($('#inputImage3').val());
-    request.open('POST', 'https://api.kairos.com/recognize');
-
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('app_id', 'c5f15112');
-    request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
-
-    request.onreadystatechange = function () {
-      var result = parseFloat(JSON.parse(this.responseText).images[0].transaction.confidence);
-      if (this.readyState === 4) {
-        console.log(result);
-        if(result > 0.6) {
-          document.getElementById('result').innerHTML = "This is a family member.";
-        }
-      }
-    };
-
-    var body = {
-      'image': url,
-      'gallery_name': 'family'
-    };
-    request.send(JSON.stringify(body));
-    var request2 = new XMLHttpRequest();
-    request2.open('POST', 'https://api.kairos.com/recognize');
-
-    request2.setRequestHeader('Content-Type', 'application/json');
-    request2.setRequestHeader('app_id', 'c5f15112');
-    request2.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
-
-    request2.onreadystatechange = function () {
-      var result2 = parseFloat(JSON.parse(this.responseText).images[0].transaction.confidence);
-      if (this.readyState === 4) {
-        console.log(result2);
-        if(result2 > 0.6) {
-          document.getElementById('result').innerHTML = "This is a suspicious person.";
-        }
-      }
-    };
-
-    var body = {
-      'image': url,
-      'gallery_name': 'badpeople'
-    };
-    request2.send(JSON.stringify(body));
-  }
-
   function display() {
     document.getElementById("add").style.display = "none";
     document.getElementById("check").style.display = "block";
+    change = true;
   }
   </script>
 <div id="add">
@@ -166,7 +185,7 @@
   <button id="switchDisplay" onclick="display()">All done!</button>
 </div>
   <div id="check" style="display:none">
-    <input type="text" name="inputImage" id="inputImage3" placeholder="Image" value="" />
+    <img id="person"/>
     <button onclick="recognize()">Analyze Face</button>
     <h4 id="result"></h4>
   </div>
