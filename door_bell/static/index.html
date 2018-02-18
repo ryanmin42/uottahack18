@@ -4,11 +4,10 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Awesome Sports">
+	<meta name="description" content="Awesome Door Bell">
 	<meta name="author" content="Korhan Akcura" >
 	<title>Awesome Door Bell</title>
 
-	<link rel="icon" href="images/favicon.ico">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/master.css" rel="stylesheet">
 
@@ -26,8 +25,9 @@
 	<div class="container">
 
 		<div class="jumbotron">
-			<h1>Awesome Door Bell</h1>
+			<h1>Your Visitor</h1>
 		</div>
+		<img id="visitor-image">
 
 	</div>
 
@@ -41,5 +41,10 @@
 	<script type="text/javascript" src="js/libs/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/libs/bootstrap.min.js"></script>
 
+	<script type="text/javascript">
+		var src = '/images/send_image.jpg';
+		var img = document.getElementById('visitor-image');
+		img.src = src;
+	</script>
 </body>
 </html>
