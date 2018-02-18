@@ -33,10 +33,22 @@
   </style>
 </head>
 <body>
-
   <script type="text/javascript">
   var change = false;
   var results;
+  var file_white;
+  var file_black;
+
+  function upload_white() {
+    file_white =  document.getElementById("inputImage");
+    document.getElementById("inputImage").setAttribute("value", file_white.name);
+  }
+
+  function upload_black() {
+    file_black =  document.getElementById("inputImage2");
+    document.getElementById("inputImage2").setAttribute("value", file_black.name);
+  }
+
   if(change) {
     var url;
     var server = new XMLHttpRequest();
@@ -82,7 +94,7 @@
       if (this.readyState === 4) {
         console.log(result2);
         if(result2 >= 0.6) {
-          results = "This is a suspicious person.";
+          results = "This is a suspicious person. Name: " + name;
           document.getElementById('person').setAttribute("src", url);
           document.getElementById('result').innerHTML = results;
         }
@@ -112,7 +124,7 @@
   }
 
   function enroll_white() {
-    var url = encodeURI($('#inputImage').val());
+    var url = file_white;
     var name = $('#nameImage').val();
     if(/\S/.test(name) && /\S/.test($('#inputImage').val()))
     $('ul.whitelist').append('<li>'+ name + '</li>');
@@ -139,7 +151,7 @@
   }
 
   function enroll_black() {
-    var url = encodeURI($('#inputImage2').val());
+    var url = file_black;
     var name = $('#nameImage2').val();
     var request = new XMLHttpRequest();
     request.open('POST', 'https://api.kairos.com/enroll');
@@ -174,9 +186,9 @@
     <h1>Add to Whitelist</h1>
     If you have a picture of family or friends you'd like to add to the whitelist, upload their picture here.
     <br><br>
-    <input type="text" name="inputImage" id="inputImage" placeholder="Image" value="" />
+    <input type="file" id="inputImage" onclick="upload_white()" value="Choose image"/>
     <input style="display:block" type="text" name="inputImage" id="nameImage" placeholder="Name" title="" value="" />
-    <button onclick="enroll_white()" style="display:block">Analyze face</button>
+    <button onclick="enroll_white()" style="display:block">Add to Whitelist</button>
     <br><br>
     <h3>Currently in the whitelist:</h3>
     <ul class="whitelist">
@@ -188,9 +200,9 @@
     <h1>Add to Blacklist</h1>
     If you have a picture of someone suspicious you'd like to add to the blacklist, upload their picture here.
     <br><br>
-    <input type="text" name="inputImage" id="inputImage2" placeholder="Image" value="" />
+    <input type="file" id="inputImage2" onclick="upload_black()" value="Choose image"/>
     <input style="display:block" type="text" name="inputImage" id="nameImage2" placeholder="Name" title="" value="" />
-    <button onclick="enroll_black()" style="display:block">Analyze face</button>
+    <button onclick="enroll_black()" style="display:block">Add to Blacklist</button>
     <br><br>
     <h3>Currently in the blacklist:</h3>
     <ul class="blacklist"></ul>
@@ -199,7 +211,6 @@
 </div>
   <div id="check" style="display:none">
     <img id="person"/>
-    <button onclick="recognize()">Analyze Face</button>
     <h4 id="result"></h4>
   </div>
 </body>
