@@ -1,225 +1,304 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Awesome Door Bell</title>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<style>
-		#check {
-			text-align: center;
-			-webkit-animation: fadein 1s;
-		}
-		#add {
-			-webkit-animation: fadein 1s;
-		}
-		@keyframes fadein {
-			from { opacity: 0; }
-			to   { opacity: 1; }
-		}
-		@keyframes fadeout {
-			from { opacity: 1; }
-			to   { opacity: 0; }
-		}
-		#switchDisplay {
-			display:block;
-			margin: 0 auto;
-		}
-	</style>
+  <title>VisualEyes</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Lato, sans-serif;
+}
+
+.container {
+  min-width: 80%;
+}
+
+h1, h2, h3, h4 {
+  font-family: Source Sans Pro, sans-serif;
+}
+
+h3 {
+  margin-top: 30px;
+}
+
+ul {
+  margin-bottom: 40px;
+}
+
+header {
+  background-color: #282828;
+}
+
+#logo {
+  width:200px;
+}
+
+button {
+  padding: 10px;
+  background-color: #1d5680;
+  color:white;
+  border-radius: 8%;
+  border: solid 1px #1d5680;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #216391;
+}
+
+input {
+  padding: 5px;
+  margin-top: 10px;
+}
+
+body {
+  background-color: #e6e6e6;
+}
+
+#result {
+  margin-top: 10px;
+}
+
+.feed_title {
+  font-weight: bold;
+}
+
+#check {
+  text-align: center;
+  -webkit-animation: fadein 1.5s;
+}
+#add {
+  -webkit-animation: fadein 1.5s;
+}
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fadeout {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+#switchDisplay {
+  display:block;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+#buttonDiv {
+  margin-top:30px;
+}
+
+li {
+  margin-left: 5%;
+}
+</style>
 <body>
-	<script type="text/javascript">
-	var change = false;
-	var results;
-	var file_white;
-	var file_black;
-	function upload_white() {
-		file_white =  document.getElementById("inputImage").webkitRelativePath;
-		console.log(file_white);
-		document.getElementById("inputImage").setAttribute("value", document.getElementById("inputImage").name);
-	}
-	function upload_black() {
-		file_black =  document.getElementById("inputImage2").webkitRelativePath;
-		document.getElementById("inputImage2").setAttribute("value", document.getElementById("inputImage2").name);
-	}
-	function get_uploaded()  {
-		if(change) {
-			var url;
-			var server = new XMLHttpRequest();
-			server.open('GET', '/api/html');
-			server.onreadystatechange = function () {
-				if (this.readyState === 4) {
-					//url = JSON.parse(this.responseText).picture;
-					url = "http://820a258b.ngrok.io/images/send_image.jpg"
-					var request = new XMLHttpRequest();
-					request.open('POST', 'https://api.kairos.com/recognize');
-					request.setRequestHeader('Content-Type', 'application/json');
-					request.setRequestHeader('app_id', 'c5f15112');
-					request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
-					request.onreadystatechange = function () {
-						if (this.readyState === 4) {
-							var transaction1 = JSON.parse(this.responseText).images[0].transaction;
-							var result = 0;
-							if (transaction1.status !== "failure") {
-								result = parseFloat(transaction1.confidence);
-							}
-							if(result >= 0.6) {
-								var name = transaction1.subject_id;
-								results = "This is a family member. Name:" + name;
-								document.getElementById('person').setAttribute("src", url);
-								document.getElementById('result').innerHTML = results;
-							}
-							else {
-								results = "This is an unknown person.";
-								document.getElementById('person').setAttribute("src", url);
-								document.getElementById('result').innerHTML = results;
-
-								var request2 = new XMLHttpRequest();
-								request2.open('POST', 'https://api.kairos.com/recognize');
-								request2.setRequestHeader('Content-Type', 'application/json');
-								request2.setRequestHeader('app_id', 'c5f15112');
-								request2.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
-								request2.onreadystatechange = function () {
-										if (this.readyState === 4) {
-										var transaction2 = JSON.parse(this.responseText).images[0].transaction;
-										var result2 = 0;
-										if (transaction2.status !== "failure") {
-											result2 = parseFloat(transaction2.confidence);
-										}
-										console.log(result2);
-										if(result2 >= 0.6) {
-											var name = transaction2.subject_id;
-											results = "This is a suspicious person. Name: " + name +"<br/><b>Police are alerted and are on their way!!!</b>";
-											document.getElementById('person').setAttribute("src", url);
-											document.getElementById('result').innerHTML = results;
-										}
-										else {
-											results = "This is an unknown person.";
-											document.getElementById('person').setAttribute("src", url);
-											document.getElementById('result').innerHTML = results;
-										}
-									}
-								};
-								var body2 = {
-									'image': url,
-									'gallery_name': 'badpeople'
-								};
-								request2.send(JSON.stringify(body2));
-							}
-						}
-					};
-					var body = {
-						'image': url,
-						'gallery_name': 'family'
-					};
-					request.send(JSON.stringify(body));
-					/*var sent = new XMLHttpRequest();
-					sent.open('GET', '/api/results');
-					sent.onreadystatechange = function () {
-						if (this.readyState === 4) {
-							console.log("Success!");
-						}
-					}*/
-				}
-			}
-			server.send();
-
-			/*var body3 = {
-				'results': results
-			};
-			request3.send(JSON.stringify(body3));*/
-		}
-	}
-	get_uploaded();
-	function enroll_white() {
-		var url = encodeURI($('#inputImage').val());
-		var name = $('#nameImage').val();
-		if(/\S/.test(name) && /\S/.test($('#inputImage').val()))
-		$('ul.whitelist').append('<li>'+ name + '</li>');
-		var request = new XMLHttpRequest();
-		request.open('POST', 'https://api.kairos.com/enroll');
-		request.setRequestHeader('Content-Type', 'application/json');
-		request.setRequestHeader('app_id', 'c5f15112');
-		request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
-		request.onreadystatechange = function () {
-			if (this.readyState === 4) {
-				console.log('Status:', this.status);
-				console.log('Headers:', this.getAllResponseHeaders());
-				console.log(file_white);
-				console.log('Body:', this.responseText);
-			}
-		};
-		var body = {
-			'image': url,
-			'subject_id': name,
-			'gallery_name': 'family'
-		};
-		request.send(JSON.stringify(body));
-	}
-	function enroll_black() {
-		var url = encodeURI($('#inputImage2').val());
-		var name = $('#nameImage2').val();
-		var request = new XMLHttpRequest();
-		request.open('POST', 'https://api.kairos.com/enroll');
-		request.setRequestHeader('Content-Type', 'application/json');
-		request.setRequestHeader('app_id', 'c5f15112');
-		request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
-		request.onreadystatechange = function () {
-			if (this.readyState === 4) {
-				console.log('Status:', this.status);
-				console.log('Headers:', this.getAllResponseHeaders());
-				console.log(name);
-				console.log('Body:', this.responseText);
-			}
-		};
-		var body = {
-			'image': url,
-			'subject_id': name,
-			'gallery_name': 'badpeople'
-		};
-		$('ul.blacklist').append('<li>' + name + '</li>');
-		request.send(JSON.stringify(body));
-	}
-	function display() {
-		document.getElementById("add").style.display = "none";
-		document.getElementById("check").style.display = "block";
-		change = true;
-		get_uploaded();
-	}
-	</script>
-<div id="add">
-	<div class="col-sm-6">
-		<h1>Add to Whitelist</h1>
-		If you have a picture of family or friends you'd like to add to the whitelist, upload their picture here.
-		<br><br>
-		<input style="display:block" id="inputImage" type="text" placeholder="Choose image"/>
-		<input style="display:block" type="text" name="inputImage" id="nameImage" placeholder="Name" title="" value="" />
-		<button onclick="enroll_white()" style="display:block">Add to Whitelist</button>
-		<br><br>
-		<h3>Currently in the whitelist:</h3>
-		<ul class="whitelist">
-
-		</ul>
-	</div>
-
-	<div class="col-sm-6">
-		<h1>Add to Blacklist</h1>
-		If you have a picture of someone suspicious you'd like to add to the blacklist, upload their picture here.
-		<br><br>
-		<input style="display:block" id="inputImage2" type="text" placeholder="Choose image"/>
-		<input style="display:block" type="text" name="inputImage" id="nameImage2" placeholder="Name" title="" value="" />
-		<button onclick="enroll_black()" style="display:block">Add to Blacklist</button>
-		<br><br>
-		<h3>Currently in the blacklist:</h3>
-		<ul class="blacklist"></ul>
-	</div>
-	<button id="switchDisplay" onclick="display()">All done!</button>
+  <script type="text/javascript">
+  var change = false;
+  var results;
+  var file_white;
+  var file_black;
+  function upload_white() {
+    file_white =  document.getElementById("inputImage").webkitRelativePath;
+    console.log(file_white);
+    document.getElementById("inputImage").setAttribute("value", document.getElementById("inputImage").name);
+  }
+  function upload_black() {
+    file_black =  document.getElementById("inputImage2").webkitRelativePath;
+    document.getElementById("inputImage2").setAttribute("value", document.getElementById("inputImage2").name);
+  }
+  function get_uploaded()  {
+    if(change) {
+      var url;
+      var server = new XMLHttpRequest();
+      server.open('GET', '/api/html');
+      server.onreadystatechange = function () {
+        if (this.readyState === 4) {
+          //url = JSON.parse(this.responseText).picture;
+          url = "http://820a258b.ngrok.io/images/send_image.jpg"
+          var request = new XMLHttpRequest();
+          request.open('POST', 'https://api.kairos.com/recognize');
+          request.setRequestHeader('Content-Type', 'application/json');
+          request.setRequestHeader('app_id', 'c5f15112');
+          request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
+          request.onreadystatechange = function () {
+            if (this.readyState === 4) {
+              var transaction1 = JSON.parse(this.responseText).images[0].transaction;
+              var result = 0;
+              if (transaction1.status !== "failure") {
+                result = parseFloat(transaction1.confidence);
+              }
+              if(result >= 0.6) {
+                var name = transaction1.subject_id;
+                results = "This is a friend of family member. Name:" + name;
+                var audio = new Audio('https://doc-14-38-docs.googleusercontent.com/docs/securesc/c9bevesce348vr9uing7uhn8u4a4isl2/f68rne7p18vqqhqpaoe18f306uckuo3i/1518962400000/17837395270871112974/17837395270871112974/1tFfaFtn1RtFvBAVXevzAD77x7OzwyH_c?e=download');
+                audio.play();
+                document.getElementById('person').setAttribute("src", url);
+                document.getElementById('result').innerHTML = results;
+              }
+              else {
+                results = "This is an unknown person.";
+                var audio = new Audio('https://doc-14-38-docs.googleusercontent.com/docs/securesc/c9bevesce348vr9uing7uhn8u4a4isl2/h02galus19ltagln9oub9hmcvbab4pfm/1518962400000/17837395270871112974/17837395270871112974/1bzU8BATqkBljWvs05QlTq2c7yFx8wAcv?e=download');
+                audio.play();
+                document.getElementById('person').setAttribute("src", url);
+                document.getElementById('result').innerHTML = results;
+                var request2 = new XMLHttpRequest();
+                request2.open('POST', 'https://api.kairos.com/recognize');
+                request2.setRequestHeader('Content-Type', 'application/json');
+                request2.setRequestHeader('app_id', 'c5f15112');
+                request2.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
+                request2.onreadystatechange = function () {
+                  if (this.readyState === 4) {
+                    var transaction2 = JSON.parse(this.responseText).images[0].transaction;
+                    var result2 = 0;
+                    if (transaction2.status !== "failure") {
+                      result2 = parseFloat(transaction2.confidence);
+                    }
+                    console.log(result2);
+                    if(result2 >= 0.6) {
+                      var name = transaction2.subject_id;
+                      var audio2 = new Audio('https://doc-0g-38-docs.googleusercontent.com/docs/securesc/c9bevesce348vr9uing7uhn8u4a4isl2/rmt46qtibq5701k8gj49hu0p7qs9sfud/1518962400000/17837395270871112974/17837395270871112974/1TGV9U4coM2SyFcVZ5kJx4Oavv_rsnvve?e=download');
+                      audio2.play();
+                      results = "This is a suspicious person. Name: " + name +"<br/><b>Police are alerted and are on their way!!!</b>";
+                      document.getElementById('person').setAttribute("src", url);
+                      document.getElementById('result').innerHTML = results;
+                    }
+                    else {
+                      var audio2 = new Audio('https://doc-14-38-docs.googleusercontent.com/docs/securesc/c9bevesce348vr9uing7uhn8u4a4isl2/h02galus19ltagln9oub9hmcvbab4pfm/1518962400000/17837395270871112974/17837395270871112974/1bzU8BATqkBljWvs05QlTq2c7yFx8wAcv?e=download');
+                      audio2.play();
+                      results = "This is an unknown person.";
+                      document.getElementById('person').setAttribute("src", url);
+                      document.getElementById('result').innerHTML = results;
+                    }
+                  }
+                };
+                var body2 = {
+                  'image': url,
+                  'gallery_name': 'badpeople'
+                };
+                request2.send(JSON.stringify(body2));
+              }
+            }
+          };
+          var body = {
+            'image': url,
+            'gallery_name': 'family'
+          };
+          request.send(JSON.stringify(body));
+          /*var sent = new XMLHttpRequest();
+          sent.open('GET', '/api/results');
+          sent.onreadystatechange = function () {
+          if (this.readyState === 4) {
+          console.log("Success!");
+        }
+      }*/
+    }
+  }
+  server.send();
+  /*var body3 = {
+  'results': results
+};
+request3.send(JSON.stringify(body3));*/
+}
+}
+get_uploaded();
+function enroll_white() {
+  var url = encodeURI($('#inputImage').val());
+  var name = $('#nameImage').val();
+  if(/\S/.test(name) && /\S/.test($('#inputImage').val()))
+  $('ul.whitelist').append('<li>'+ name + '</li>');
+  var request = new XMLHttpRequest();
+  request.open('POST', 'https://api.kairos.com/enroll');
+  request.setRequestHeader('Content-Type', 'application/json');
+  request.setRequestHeader('app_id', 'c5f15112');
+  request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
+  request.onreadystatechange = function () {
+    if (this.readyState === 4) {
+      console.log('Status:', this.status);
+      console.log('Headers:', this.getAllResponseHeaders());
+      console.log(file_white);
+      console.log('Body:', this.responseText);
+    }
+  };
+  var body = {
+    'image': url,
+    'subject_id': name,
+    'gallery_name': 'family'
+  };
+  request.send(JSON.stringify(body));
+}
+function enroll_black() {
+  var url = encodeURI($('#inputImage2').val());
+  var name = $('#nameImage2').val();
+  var request = new XMLHttpRequest();
+  request.open('POST', 'https://api.kairos.com/enroll');
+  request.setRequestHeader('Content-Type', 'application/json');
+  request.setRequestHeader('app_id', 'c5f15112');
+  request.setRequestHeader('app_key', 'c54cd4e0dddcbe2beb12e7ed797d1815');
+  request.onreadystatechange = function () {
+    if (this.readyState === 4) {
+      console.log('Status:', this.status);
+      console.log('Headers:', this.getAllResponseHeaders());
+      console.log(name);
+      console.log('Body:', this.responseText);
+    }
+  };
+  var body = {
+    'image': url,
+    'subject_id': name,
+    'gallery_name': 'badpeople'
+  };
+  $('ul.blacklist').append('<li>' + name + '</li>');
+  request.send(JSON.stringify(body));
+}
+function display() {
+  document.getElementById("add").style.display = "none";
+  document.getElementById("check").style.display = "block";
+  change = true;
+  get_uploaded();
+}
+</script>
+<header>
+  <div class="container">
+    <img  id="logo" src="https://lh5.googleusercontent.com/WarfSM6IHVxuoRGItdL5mrafvwKVgkal3qokcq_-WmS16rTLE9BTTkoh8adrpirfYkqlyhdYZoJOVEigBdW-=w1920-h900"/>
+  </div>
+</header>
+<div class="container">
+  <div id="add">
+    <div class="col-sm-6">
+      <h1>Add to Whitelist</h1>
+      If you have a picture of family or friends you'd like to add to the whitelist, upload their picture here.
+      <input style="display:block" id="inputImage" type="text" placeholder="Choose image"/>
+      <input style="display:block" type="text" name="inputImage" id="nameImage" placeholder="Name" title="" value="" />
+      <button onclick="enroll_white()" style="display:block">Add to Whitelist</button>
+      <h3>Currently on the whitelist:</h3>
+      <ul class="whitelist">
+      </ul>
+    </div>
+    <div class="col-sm-6">
+      <h1>Add to Blacklist</h1>
+      If you have a picture of someone suspicious you'd like to add to the blacklist, upload their picture here.
+      <input style="display:block" id="inputImage2" type="text" placeholder="Choose image"/>
+      <input style="display:block" type="text" name="inputImage" id="nameImage2" placeholder="Name" title="" value="" />
+      <button onclick="enroll_black()" style="display:block">Add to Blacklist</button>
+      <h3>Currently on the blacklist:</h3>
+      <ul class="blacklist"></ul>
+    </div>
+    <div id="buttonDiv" class="col-sm-12">
+      <button id="switchDisplay" onclick="display()">All done!</button>
+    </div>
+  </div>
+  <div id="check" style="display:none">
+    <img id="person"/>
+    <h4 id="result"></h4>
+  </div>
 </div>
-	<div id="check" style="display:none">
-		<img id="person"/>
-		<h4 id="result"></h4>
-	</div>
 </body>
 </html>

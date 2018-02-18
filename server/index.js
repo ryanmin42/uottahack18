@@ -4,6 +4,7 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var server = express();
+var request = require('request');
 //var TextToSpeech = require('text-to-speech-js');
 server.use(bodyParser.json({limit: "50mb"}));
 var picture;
@@ -19,10 +20,40 @@ server.use(bodyParser.urlencoded({
 
 server.use(bodyParser.json());
 
+request({
+  method: 'POST',
+  url: 'https://api.kairos.com/gallery/remove',
+  headers: {
+    'Content-Type': 'application/json',
+    'app_id': 'c5f15112',
+    'app_key': 'c54cd4e0dddcbe2beb12e7ed797d1815'
+  },
+  body: "{  \"gallery_name\": \"family\"}"
+}, function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+});
+
+request({
+  method: 'POST',
+  url: 'https://api.kairos.com/gallery/remove',
+  headers: {
+    'Content-Type': 'application/json',
+    'app_id': 'c5f15112',
+    'app_key': 'c54cd4e0dddcbe2beb12e7ed797d1815'
+  },
+  body: "{  \"gallery_name\": \"badpeople\"}"
+}, function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+});
+
 server.post('/api/image', function(req, res) {
 	picture = req.body;
 	console.log('/api/image SUCCESS.');
-	res.end(JSON.stringify({"result" : "SUCCESS"}));  
+	res.end(JSON.stringify({"result" : "SUCCESS"}));
 });
 
 server.get('/api/html', function(req, res) {
