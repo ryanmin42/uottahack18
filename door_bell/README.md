@@ -5,6 +5,7 @@ INSTALL
 
 ```bash
 $ pip install -r requirements.txt
+$ sudo apt-get install python-opencv
 ```
 
 RUN
@@ -18,5 +19,5 @@ RUN
 ===
 
 ```bash
-FLASK_APP=app.py flask run --host 0.0.0.0
+FLASK_APP=app.py flask run --host 0.0.0.0 > flask.log &
 ```
